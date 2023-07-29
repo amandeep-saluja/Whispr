@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-public class Chat {
+public class ChatDTO {
     private String id;
     private List<String> userId;
     private String groupName;

@@ -12,10 +12,8 @@ CREATE TABLE Message (
 -- Table: User
 CREATE TABLE User (
                       id VARCHAR(255) PRIMARY KEY,
-                      chat_id VARCHAR(255),
                       name VARCHAR(255),
-                      isActive BOOLEAN,
-                      FOREIGN KEY (chat_id) REFERENCES Chat(id)
+                      isActive BOOLEAN
 );
 
 -- Table: Chat
@@ -24,3 +22,29 @@ CREATE TABLE Chat (
                       groupName VARCHAR(255)
 );
 
+-- Table: UserChat (Junction Table)
+CREATE TABLE UserChat (
+                          chatId VARCHAR(255),
+                          userId VARCHAR(255),
+                          PRIMARY KEY (chatId, userId),
+                          FOREIGN KEY (chatId) REFERENCES Chat(id),
+                          FOREIGN KEY (userId) REFERENCES User(id)
+);
+
+-- Insert Users
+INSERT INTO User (id, name, isActive) VALUES
+                                          ('user1', 'Alice', true),
+                                          ('user2', 'Bob', true),
+                                          ('user3', 'Charlie', true);
+
+-- Insert Chats
+INSERT INTO Chat (id, groupName) VALUES
+                                     ('chat1', 'Group A'),
+                                     ('chat2', 'Group B');
+
+-- Associate Users with Chats (UserChat Junction Table)
+INSERT INTO UserChat (chatId, userId) VALUES
+                                          ('chat1', 'user1'),
+                                          ('chat1', 'user2'),
+                                          ('chat2', 'user2'),
+                                          ('chat2', 'user3');

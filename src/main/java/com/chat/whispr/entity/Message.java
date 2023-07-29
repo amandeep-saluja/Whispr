@@ -1,5 +1,6 @@
 package com.chat.whispr.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +11,8 @@ import java.time.LocalDateTime;
 @Table(name = "Message")
 @Getter
 @Setter
-public class MessageEntity {
+@EqualsAndHashCode
+public class Message {
 
     @Id
     @Column(length = 255)

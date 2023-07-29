@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class User {
+public class UserDTO {
     private String id;
     private String name;
     private boolean isActive;
