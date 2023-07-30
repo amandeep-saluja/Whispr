@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class UserChat {
 
     @EmbeddedId
-    private UserChatId id;
+    public UserChatId id;
 
     public UserChatId getId() {
         return id;
@@ -16,5 +16,12 @@ public class UserChat {
 
     public void setId(UserChatId id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "UserChat{" +
+                "id=" + id +
+                '}';
     }
 }

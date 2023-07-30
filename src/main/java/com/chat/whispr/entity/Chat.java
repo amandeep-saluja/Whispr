@@ -16,19 +16,21 @@ public class Chat {
     @Column(length = 255)
     private String groupName;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(
-            name = "UserChat",
-            joinColumns = @JoinColumn(name = "chat_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+    @ElementCollection
+    @CollectionTable(name = "UserChat", joinColumns = @JoinColumn(name = "chat_id"))
+    @Column(name = "user_id")
+    private Set<String> userIds = new HashSet<>();
 
-    private Set<User> users = new HashSet<>();
+    public void addUser(String userId) {
+        userIds.add(userId);
+    }
 
-    // Helper method to add users to the chat
-    public void addUser(User user) {
-        users.add(user);
-        user.getChats().add(this);
+    public Set<String> getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(Set<String> userIds) {
+        this.userIds = userIds;
     }
 
     public String getId() {
@@ -47,24 +49,5 @@ public class Chat {
         this.groupName = groupName;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Chat chat = (Chat) o;
-        return Objects.equals(id, chat.id) && Objects.equals(groupName, chat.groupName) && Objects.equals(users, chat.users);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, groupName, users);
-    }
 }

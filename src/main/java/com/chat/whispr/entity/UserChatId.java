@@ -1,14 +1,34 @@
 package com.chat.whispr.entity;
 
+import lombok.Builder;
+
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
+@Builder
 public class UserChatId implements Serializable {
 
     private String chatId;
     private String userId;
+
+    public UserChatId() {
+
+    }
+
+    public UserChatId(String chatId, String userId) {
+        this.chatId = chatId;
+        this.userId = userId;
+    }
+
+    @Override
+    public String toString() {
+        return "UserChatId{" +
+                "chatId='" + chatId + '\'' +
+                ", userId='" + userId + '\'' +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {

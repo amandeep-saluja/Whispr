@@ -2,11 +2,10 @@ package com.chat.whispr.entity;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "User")
+@Table(name = "Users")
 public class User {
 
     @Id
@@ -19,20 +18,13 @@ public class User {
     @Column
     private boolean isActive;
 
-    @ManyToMany(mappedBy = "users")
-    private Set<Chat> chats = new HashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "UserChat", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "chat_id")
+    private Set<String> chatIds = new HashSet<>();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return isActive == user.isActive && Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(chats, user.chats);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, isActive, chats);
+    public void addChat(String chatId) {
+        chatIds.add(chatId);
     }
 
     public void setId(String id) {
@@ -51,8 +43,22 @@ public class User {
         isActive = active;
     }
 
-    public void setChats(Set<Chat> chats) {
-        this.chats = chats;
+    public Set<String> getChatIds() {
+        return chatIds;
     }
+
+    public void setChatIds(Set<String> chatIds) {
+        this.chatIds = chatIds;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+
 }
 
