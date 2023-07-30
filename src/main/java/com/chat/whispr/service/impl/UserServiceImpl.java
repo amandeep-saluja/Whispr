@@ -10,9 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -62,5 +61,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<String> getAllChatRoom(String userId) {
         return userChatRepository.findAllChatByUserId(userId);
+    }
+
+    @Override
+    public Set<UserDTO> getAllUser() {
+        List<User> userList = userRepository.findAll();
+        return UserDTO.getUserDTOSet(new HashSet<>(userList));
     }
 }

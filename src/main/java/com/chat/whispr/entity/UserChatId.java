@@ -2,6 +2,7 @@ package com.chat.whispr.entity;
 
 import lombok.Builder;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -10,7 +11,10 @@ import java.util.Objects;
 @Builder
 public class UserChatId implements Serializable {
 
+    @Column(name = "chat_id")
     private String chatId;
+
+    @Column(name = "user_id")
     private String userId;
 
     public UserChatId() {

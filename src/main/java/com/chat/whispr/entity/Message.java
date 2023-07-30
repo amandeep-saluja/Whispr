@@ -21,18 +21,18 @@ public class Message {
     @Column(length = 1000)
     private String body;
 
-    @Column
+    @Column(name = "is_read")
     private boolean isRead;
 
-    @Column
+    @Column(name = "is_received")
     private boolean isReceived;
 
-    @Column
+    @Column(name = "creation_date_time")
     private LocalDateTime creationDateTime;
 
-    @Column(length = 255)
+    @Column(length = 255, name = "chat_id")
     private String chatId;
 
-    @Column(length = 255)
+    @Column(length = 255, name = "user_id")
     private String userId;
 }

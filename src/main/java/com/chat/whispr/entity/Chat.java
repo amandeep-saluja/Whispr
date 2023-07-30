@@ -13,7 +13,7 @@ public class Chat {
     @Column(length = 255)
     private String id;
 
-    @Column(length = 255)
+    @Column(length = 255, name = "group_name")
     private String groupName;
 
     @ElementCollection

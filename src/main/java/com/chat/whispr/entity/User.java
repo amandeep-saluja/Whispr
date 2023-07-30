@@ -15,7 +15,7 @@ public class User {
     @Column(length = 255)
     private String name;
 
-    @Column
+    @Column(name = "is_active")
     private boolean isActive;
 
     @ElementCollection

@@ -15,4 +15,6 @@ public interface UserService {
     public UserDTO deleteUser(String userId, String userName);
 
     public Set<String> getAllChatRoom(String userId);
+
+    public Set<UserDTO> getAllUser();
 }
