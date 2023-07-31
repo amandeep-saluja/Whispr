@@ -19,7 +19,7 @@ public class UserDTO {
     private String name;
     private boolean isActive;
     private LocalDateTime lastActive;
-    private Set<String> chatId;
+    private List<ChatDTO> chats;
 
     public static UserDTO getUserDTO(User user) {
         UserDTO dto = new UserDTO();
@@ -27,13 +27,13 @@ public class UserDTO {
         dto.setId(user.getId());
         dto.setActive(user.isActive());
         dto.setLastActive(LocalDateTime.now());
-        dto.setChatId(user.getChatIds());
+        dto.setChats(ChatDTO.getChatDTOList(user.getChats()));
         return dto;
     }
 
-    public static Set<UserDTO> getUserDTOSet(Set<User> users) {
+    public static List<UserDTO> getUserDTOList(List<User> users) {
         if(null!=users) {
-            return users.stream().map(UserDTO::getUserDTO).collect(Collectors.toSet());
+            return users.stream().map(UserDTO::getUserDTO).collect(Collectors.toList());
         }
         return null;
     }

@@ -1,8 +1,9 @@
 package com.chat.whispr.service.impl;
 
+import com.chat.whispr.entity.Chat;
 import com.chat.whispr.entity.User;
+import com.chat.whispr.model.ChatDTO;
 import com.chat.whispr.model.UserDTO;
-import com.chat.whispr.repository.UserChatRepository;
 import com.chat.whispr.repository.UserRepository;
 import com.chat.whispr.service.UserService;
 import com.chat.whispr.utils.Utility;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -19,11 +19,8 @@ public class UserServiceImpl implements UserService {
 
     UserRepository userRepository;
 
-    UserChatRepository userChatRepository;
-
-    public UserServiceImpl(@Autowired UserRepository userRepository, @Autowired UserChatRepository userChatRepository) {
+    public UserServiceImpl(@Autowired UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userChatRepository = userChatRepository;
     }
 
     @Override
@@ -59,13 +56,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<String> getAllChatRoom(String userId) {
-        return userChatRepository.findAllChatByUserId(userId);
+    public List<ChatDTO> getAllChatRoom(String userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isPresent()) {
+            List<Chat> chats = user.get().getChats();
+            log.info("get all chats {} by user id {}", chats, userId);
+            return ChatDTO.getChatDTOList(chats);
+        }
+        return null;
     }
 
     @Override
-    public Set<UserDTO> getAllUser() {
+    public List<UserDTO> getAllUser() {
         List<User> userList = userRepository.findAll();
-        return UserDTO.getUserDTOSet(new HashSet<>(userList));
+        return UserDTO.getUserDTOList(userList);
     }
+
+    @Override
+    public UserDTO getUserById(String userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return user.map(UserDTO::getUserDTO).orElse(null);
+    }
+
+
 }

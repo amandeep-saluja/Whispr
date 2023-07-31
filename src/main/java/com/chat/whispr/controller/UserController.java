@@ -1,15 +1,17 @@
 package com.chat.whispr.controller;
 
+import com.chat.whispr.entity.User;
 import com.chat.whispr.model.UserDTO;
+import com.chat.whispr.repository.UserRepository;
 import com.chat.whispr.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("user")
@@ -19,13 +21,32 @@ public class UserController {
 
     private UserService userService;
 
-    public UserController(@Autowired UserService userService) {
+    private UserRepository userRepository;
+
+    public UserController(@Autowired UserService userService, @Autowired UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("all")
-    public Set<UserDTO> getAllUsers() {
+    public List<User> getAllUsers() {
         log.info("fetch all users");
-        return userService.getAllUser();
+//        return userService.getAllUser();
+        return userRepository.findAll();
+    }
+
+    @GetMapping("/{userId}")
+    public UserDTO findUser(@PathVariable String userId) {
+        log.info("fetch user by id {}", userId);
+        return userService.getUserById(userId);
+    }
+
+    @PostMapping("/save")
+    public UserDTO saveUserWithChat(@RequestBody User user) {
+        user.setId(UUID.randomUUID().toString());
+        if (null != user.getChats() && !user.getChats().isEmpty()) {
+            user.setChats(user.getChats().stream().peek(chat -> chat.setId(UUID.randomUUID().toString())).collect(Collectors.toList()));
+        }
+        return UserDTO.getUserDTO(userRepository.save(user));
     }
 }

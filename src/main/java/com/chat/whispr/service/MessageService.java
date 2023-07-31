@@ -8,7 +8,7 @@ public interface MessageService {
 
     public List<MessageDTO> getAllMessage(String chatId, String userId);
 
-    public MessageDTO sendMessage(String chatId, String userId);
+    public MessageDTO sendMessage(String chatId, String userId, String msg);
 
     public MessageDTO markReceived(String messageId);
 

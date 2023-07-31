@@ -16,20 +16,20 @@ import java.util.stream.Collectors;
 @ToString
 public class ChatDTO {
     private String id;
-    private Set<String> userId;
+    private List<UserDTO> users;
     private String groupName;
 
     public static ChatDTO getChatDTO(Chat chat) {
         ChatDTO dto = new ChatDTO();
         dto.setId(chat.getId());
         dto.setGroupName(chat.getGroupName());
-        dto.setUserId(chat.getUserIds());
+        dto.setUsers(UserDTO.getUserDTOList(chat.getUsers()));
         return dto;
     }
 
-    public static Set<ChatDTO> getChatDTOSet(List<Chat> Chats) {
+    public static List<ChatDTO> getChatDTOList(List<Chat> Chats) {
         if(null!=Chats) {
-            return Chats.stream().map(ChatDTO::getChatDTO).collect(Collectors.toSet());
+            return Chats.stream().map(ChatDTO::getChatDTO).collect(Collectors.toList());
         }
         return null;
     }
