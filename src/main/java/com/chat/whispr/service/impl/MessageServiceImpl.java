@@ -19,14 +19,18 @@ public class MessageServiceImpl implements MessageService {
 
     private MessageRepository messageRepository;
 
-    public MessageServiceImpl(MessageRepository messageRepository) {
+    private CommonService service;
+
+    public MessageServiceImpl(MessageRepository messageRepository, CommonService service) {
         this.messageRepository = messageRepository;
+        this.service = service;
     }
 
     @Override
     public List<MessageDTO> getAllMessage(String chatId, String userId) {
         log.info("Service layer: get all messages by userId: {} and chatId: {}", userId, chatId);
-        return MessageDTO.getMessageDTOList(messageRepository.findMessageByChatIdAndUserId(chatId, userId));
+        //return MessageDTO.getMessageDTOList(messageRepository.findMessageByChatIdAndUserId(chatId, userId));
+        return service.convertToMessageDTOList(messageRepository.findMessageByChatIdAndUserId(chatId, userId));
     }
 
     @Override
@@ -39,7 +43,8 @@ public class MessageServiceImpl implements MessageService {
         message.setUserId(userId);
         message.setCreationDateTime(LocalDateTime.now());
         message.setBody(msg);
-        return MessageDTO.getMessageDTO(messageRepository.save(message));
+        //return MessageDTO.getMessageDTO(messageRepository.save(message));
+        return service.convertToMessageDTO(messageRepository.save(message));
     }
 
     @Override
@@ -47,7 +52,8 @@ public class MessageServiceImpl implements MessageService {
         Optional<Message> message = messageRepository.findById(messageId);
         if(message.isPresent()) {
             message.get().setReceived(true);
-            return MessageDTO.getMessageDTO(message.get());
+            //return MessageDTO.getMessageDTO(message.get());
+            return service.convertToMessageDTO(message.get());
         }
         return null;
     }
@@ -57,7 +63,8 @@ public class MessageServiceImpl implements MessageService {
         Optional<Message> message = messageRepository.findById(messageId);
         if(message.isPresent()) {
             message.get().setRead(true);
-            return MessageDTO.getMessageDTO(message.get());
+            //return MessageDTO.getMessageDTO(message.get());
+            return service.convertToMessageDTO(message.get());
         }
         return null;
     }

@@ -21,7 +21,7 @@ public class UserDTO {
     private LocalDateTime lastActive;
     private List<ChatDTO> chats;
 
-    public static UserDTO getUserDTO(User user) {
+    /*public static UserDTO getUserDTO(User user) {
         UserDTO dto = new UserDTO();
         dto.setName(user.getName());
         dto.setId(user.getId());
@@ -36,5 +36,5 @@ public class UserDTO {
             return users.stream().map(UserDTO::getUserDTO).collect(Collectors.toList());
         }
         return null;
-    }
+    }*/
 }

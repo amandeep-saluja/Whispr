@@ -4,6 +4,7 @@ import com.chat.whispr.entity.User;
 import com.chat.whispr.model.UserDTO;
 import com.chat.whispr.repository.UserRepository;
 import com.chat.whispr.service.UserService;
+import com.chat.whispr.service.impl.CommonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,16 +24,19 @@ public class UserController {
 
     private UserRepository userRepository;
 
-    public UserController(@Autowired UserService userService, @Autowired UserRepository userRepository) {
+    private CommonService service;
+
+    public UserController(UserService userService, UserRepository userRepository, CommonService service) {
         this.userService = userService;
         this.userRepository = userRepository;
+        this.service = service;
     }
 
     @GetMapping("all")
-    public List<User> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         log.info("fetch all users");
 //        return userService.getAllUser();
-        return userRepository.findAll();
+        return service.convertToUserDTOList(userRepository.findAll());
     }
 
     @GetMapping("/{userId}")
@@ -47,6 +51,7 @@ public class UserController {
         if (null != user.getChats() && !user.getChats().isEmpty()) {
             user.setChats(user.getChats().stream().peek(chat -> chat.setId(UUID.randomUUID().toString())).collect(Collectors.toList()));
         }
-        return UserDTO.getUserDTO(userRepository.save(user));
+        //return UserDTO.getUserDTO(userRepository.save(user));
+        return service.convertToUserDTO(userRepository.save(user));
     }
 }

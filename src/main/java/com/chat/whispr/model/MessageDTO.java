@@ -27,7 +27,7 @@ public class MessageDTO {
 
     private String userId;
 
-    public static MessageDTO getMessageDTO(Message message) {
+    /*public static MessageDTO getMessageDTO(Message message) {
         MessageDTO dto = new MessageDTO();
         dto.setId(message.getId());
         dto.setChatId(message.getChatId());
@@ -44,5 +44,5 @@ public class MessageDTO {
             return messages.stream().map(MessageDTO::getMessageDTO).collect(Collectors.toList());
         }
         return null;
-    }
+    }*/
 }

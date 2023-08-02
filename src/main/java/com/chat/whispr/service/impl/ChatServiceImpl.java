@@ -7,15 +7,12 @@ import com.chat.whispr.model.UserDTO;
 import com.chat.whispr.repository.ChatRepository;
 import com.chat.whispr.repository.UserRepository;
 import com.chat.whispr.service.ChatService;
-import com.chat.whispr.service.UserService;
 import com.chat.whispr.utils.Utility;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -26,9 +23,12 @@ public class ChatServiceImpl implements ChatService {
 
     UserRepository userRepository;
 
-    public ChatServiceImpl(@Autowired ChatRepository chatRepository, @Autowired UserRepository userRepository) {
+    CommonService service;
+
+    public ChatServiceImpl(ChatRepository chatRepository, UserRepository userRepository, CommonService service) {
         this.chatRepository = chatRepository;
         this.userRepository = userRepository;
+        this.service = service;
     }
 
     @Override
@@ -39,21 +39,23 @@ public class ChatServiceImpl implements ChatService {
         chat.setGroupName(Utility.splitCamelCase(groupName.trim()));
         chat.setUsers(users);
         chatRepository.save(chat);
-        users.forEach(user->{
+        users.forEach(user -> {
             user.getChats().add(chat);
         });
         userRepository.saveAll(users);
-        return ChatDTO.getChatDTO(chat);
+        //return ChatDTO.getChatDTO(chat);
+        return service.convertToChatDTO(chat);
     }
 
     @Override
     public ChatDTO addUserToChatRoom(String chatId, List<String> userIds) {
         List<User> user = userRepository.findAllById(userIds);
         Optional<Chat> chat = chatRepository.findById(chatId);
-        if(chat.isPresent()) {
+        if (chat.isPresent()) {
             chat.get().getUsers().addAll(user);
             chatRepository.save(chat.get());
-            return ChatDTO.getChatDTO(chat.get());
+            //return ChatDTO.getChatDTO(chat.get());
+            return service.convertToChatDTO(chat.get());
         }
         return null;
     }
@@ -61,10 +63,11 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public List<UserDTO> getAllUser(String chatId) {
         Optional<Chat> chatDTO = chatRepository.findById(chatId);
-        if(chatDTO.isPresent()) {
+        if (chatDTO.isPresent()) {
             List<User> users = chatDTO.get().getUsers();
             log.info("get all user {} by chat id {}", users, chatId);
-            return UserDTO.getUserDTOList(users);
+            //return UserDTO.getUserDTOList(users);
+            return service.convertToUserDTOList(users);
         }
         return null;
     }

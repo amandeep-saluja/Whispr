@@ -19,8 +19,11 @@ public class UserServiceImpl implements UserService {
 
     UserRepository userRepository;
 
-    public UserServiceImpl(@Autowired UserRepository userRepository) {
+    CommonService service;
+
+    public UserServiceImpl(UserRepository userRepository, CommonService service) {
         this.userRepository = userRepository;
+        this.service = service;
     }
 
     @Override
@@ -28,8 +31,8 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setId(String.valueOf(UUID.randomUUID()));
         user.setName(Utility.splitCamelCase(userName.trim()));
-        userRepository.save(user);
-        return UserDTO.getUserDTO(user);
+        User savedUser = userRepository.save(user);
+        return service.convertToUserDTO(savedUser);
     }
 
     @Override
@@ -37,8 +40,9 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
             user.get().setName(Utility.splitCamelCase(userName.trim()));
-            userRepository.save(user.get());
-            return UserDTO.getUserDTO(user.get());
+            User savedUser = userRepository.save(user.get());
+            //return UserDTO.getUserDTO(user.get());
+            return service.convertToUserDTO(savedUser);
         }
         return null;
     }
@@ -61,7 +65,8 @@ public class UserServiceImpl implements UserService {
         if(user.isPresent()) {
             List<Chat> chats = user.get().getChats();
             log.info("get all chats {} by user id {}", chats, userId);
-            return ChatDTO.getChatDTOList(chats);
+            //return ChatDTO.getChatDTOList(chats);
+            return service.convertToChatDTOList(chats);
         }
         return null;
     }
@@ -69,13 +74,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> getAllUser() {
         List<User> userList = userRepository.findAll();
-        return UserDTO.getUserDTOList(userList);
+        //return UserDTO.getUserDTOList(userList);
+        return service.convertToUserDTOList(userList);
     }
 
     @Override
     public UserDTO getUserById(String userId) {
         Optional<User> user = userRepository.findById(userId);
-        return user.map(UserDTO::getUserDTO).orElse(null);
+        //return user.map(UserDTO::getUserDTO).orElse(null);
+        return user.map(service::convertToUserDTO).orElse(null);
     }
 
 
