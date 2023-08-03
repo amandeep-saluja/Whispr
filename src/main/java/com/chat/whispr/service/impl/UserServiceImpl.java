@@ -27,28 +27,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO createUser(String userName) {
+    public User createUser(String userName) {
         User user = new User();
         user.setId(String.valueOf(UUID.randomUUID()));
         user.setName(Utility.splitCamelCase(userName.trim()));
         User savedUser = userRepository.save(user);
-        return service.convertToUserDTO(savedUser);
+        return savedUser;
+        //return service.convertToUserDTO(savedUser);
     }
 
     @Override
-    public UserDTO updateUser(String userId, String userName) {
+    public User updateUser(String userId, String userName) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
             user.get().setName(Utility.splitCamelCase(userName.trim()));
             User savedUser = userRepository.save(user.get());
+            return user.get();
             //return UserDTO.getUserDTO(user.get());
-            return service.convertToUserDTO(savedUser);
+            //return service.convertToUserDTO(savedUser);
         }
         return null;
     }
 
     @Override
-    public UserDTO deleteUser(String userId, String userName) {
+    public User deleteUser(String userId, String userName) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent() && user.get().getName().equalsIgnoreCase(userName)) {
             // TODO: define logic to below
@@ -60,29 +62,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<ChatDTO> getAllChatRoom(String userId) {
+    public List<Chat> getAllChatRoom(String userId) {
         Optional<User> user = userRepository.findById(userId);
         if(user.isPresent()) {
             List<Chat> chats = user.get().getChats();
             log.info("get all chats {} by user id {}", chats, userId);
+            return chats;
             //return ChatDTO.getChatDTOList(chats);
-            return service.convertToChatDTOList(chats);
+            //return service.convertToChatDTOList(chats);
         }
         return null;
     }
 
     @Override
-    public List<UserDTO> getAllUser() {
+    public List<User> getAllUser() {
         List<User> userList = userRepository.findAll();
         //return UserDTO.getUserDTOList(userList);
-        return service.convertToUserDTOList(userList);
+        return userList;
+        //return service.convertToUserDTOList(userList);
     }
 
     @Override
-    public UserDTO getUserById(String userId) {
+    public User getUserById(String userId) {
         Optional<User> user = userRepository.findById(userId);
+        return user.get();
         //return user.map(UserDTO::getUserDTO).orElse(null);
-        return user.map(service::convertToUserDTO).orElse(null);
+        //return user.map(service::convertToUserDTO).orElse(null);
     }
 
 

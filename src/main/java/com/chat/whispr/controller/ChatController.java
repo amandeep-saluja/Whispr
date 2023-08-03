@@ -1,5 +1,6 @@
 package com.chat.whispr.controller;
 
+import com.chat.whispr.entity.Chat;
 import com.chat.whispr.entity.User;
 import com.chat.whispr.model.ChatDTO;
 import com.chat.whispr.model.UserDTO;
@@ -21,17 +22,17 @@ public class ChatController {
     }
 
     @GetMapping("/{chatId}")
-    public List<UserDTO> getAllUsers(@PathVariable String chatId) {
+    public List<User> getAllUsers(@PathVariable String chatId) {
         return service.getAllUser(chatId);
     }
 
     @PostMapping("/create")
-    public ChatDTO createChatRoom(@RequestParam(name = "userIds") List<String> userIds, @RequestParam(name = "groupName") String groupName) {
+    public Chat createChatRoom(@RequestParam(name = "userIds") List<String> userIds, @RequestParam(name = "groupName") String groupName) {
         return service.createChatRoom(userIds, groupName);
     }
 
     @PostMapping("/add-user")
-    public ChatDTO addUsersToChat(@RequestParam(name = "chatId") String chatId, @RequestParam(name = "userIds") List<String> userIds) {
+    public Chat addUsersToChat(@RequestParam(name = "chatId") String chatId, @RequestParam(name = "userIds") List<String> userIds) {
         return service.addUserToChatRoom(chatId, userIds);
     }
 }

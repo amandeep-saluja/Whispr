@@ -19,7 +19,7 @@ public class ChatDTO {
     private List<UserDTO> users;
     private String groupName;
 
-    /*public static ChatDTO getChatDTO(Chat chat) {
+    public static ChatDTO getChatDTO(Chat chat) {
         ChatDTO dto = new ChatDTO();
         dto.setId(chat.getId());
         dto.setGroupName(chat.getGroupName());
@@ -32,5 +32,5 @@ public class ChatDTO {
             return Chats.stream().map(ChatDTO::getChatDTO).collect(Collectors.toList());
         }
         return null;
-    }*/
+    }
 }

@@ -33,25 +33,26 @@ public class UserController {
     }
 
     @GetMapping("all")
-    public List<UserDTO> getAllUsers() {
+    public List<User> getAllUsers() {
         log.info("fetch all users");
-//        return userService.getAllUser();
-        return service.convertToUserDTOList(userRepository.findAll());
+        return userService.getAllUser();
+        //return service.convertToUserDTOList(userRepository.findAll());
     }
 
     @GetMapping("/{userId}")
-    public UserDTO findUser(@PathVariable String userId) {
+    public User findUser(@PathVariable String userId) {
         log.info("fetch user by id {}", userId);
         return userService.getUserById(userId);
     }
 
     @PostMapping("/save")
-    public UserDTO saveUserWithChat(@RequestBody User user) {
+    public User saveUserWithChat(@RequestBody User user) {
         user.setId(UUID.randomUUID().toString());
         if (null != user.getChats() && !user.getChats().isEmpty()) {
             user.setChats(user.getChats().stream().peek(chat -> chat.setId(UUID.randomUUID().toString())).collect(Collectors.toList()));
         }
+        return userRepository.save(user);
         //return UserDTO.getUserDTO(userRepository.save(user));
-        return service.convertToUserDTO(userRepository.save(user));
+        //return service.convertToUserDTO(userRepository.save(user));
     }
 }

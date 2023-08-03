@@ -1,6 +1,7 @@
 package com.chat.whispr.service;
 
 import com.chat.whispr.entity.Chat;
+import com.chat.whispr.entity.User;
 import com.chat.whispr.model.ChatDTO;
 import com.chat.whispr.model.UserDTO;
 
@@ -9,15 +10,15 @@ import java.util.List;
 
 public interface UserService {
 
-    public UserDTO createUser(String userName);
+    public User createUser(String userName);
 
-    public UserDTO updateUser(String userId, String userName);
+    public User updateUser(String userId, String userName);
 
-    public UserDTO deleteUser(String userId, String userName);
+    public User deleteUser(String userId, String userName);
 
-    public List<ChatDTO> getAllChatRoom(String userId);
+    public List<Chat> getAllChatRoom(String userId);
 
-    public List<UserDTO> getAllUser();
+    public List<User> getAllUser();
 
-    public UserDTO getUserById(String userId);
+    public User getUserById(String userId);
 }

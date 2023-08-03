@@ -32,7 +32,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ChatDTO createChatRoom(List<String> userIds, String groupName) {
+    public Chat createChatRoom(List<String> userIds, String groupName) {
         List<User> users = userRepository.findAllById(userIds);
         Chat chat = new Chat();
         chat.setId(UUID.randomUUID().toString());
@@ -43,31 +43,34 @@ public class ChatServiceImpl implements ChatService {
             user.getChats().add(chat);
         });
         userRepository.saveAll(users);
+        return chat;
         //return ChatDTO.getChatDTO(chat);
-        return service.convertToChatDTO(chat);
+        //return service.convertToChatDTO(chat);
     }
 
     @Override
-    public ChatDTO addUserToChatRoom(String chatId, List<String> userIds) {
+    public Chat addUserToChatRoom(String chatId, List<String> userIds) {
         List<User> user = userRepository.findAllById(userIds);
         Optional<Chat> chat = chatRepository.findById(chatId);
         if (chat.isPresent()) {
             chat.get().getUsers().addAll(user);
             chatRepository.save(chat.get());
+            return chat.get();
             //return ChatDTO.getChatDTO(chat.get());
-            return service.convertToChatDTO(chat.get());
+            //return service.convertToChatDTO(chat.get());
         }
         return null;
     }
 
     @Override
-    public List<UserDTO> getAllUser(String chatId) {
+    public List<User> getAllUser(String chatId) {
         Optional<Chat> chatDTO = chatRepository.findById(chatId);
         if (chatDTO.isPresent()) {
             List<User> users = chatDTO.get().getUsers();
             log.info("get all user {} by chat id {}", users, chatId);
+            return users;
             //return UserDTO.getUserDTOList(users);
-            return service.convertToUserDTOList(users);
+            //return service.convertToUserDTOList(users);
         }
         return null;
     }
