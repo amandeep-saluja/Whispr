@@ -1,0 +1,75 @@
+.container {
+    width: 80vw;
+    max-width: 80vw;
+    margin: 50px auto;
+}
+
+.connect-btn {
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    background-color: greenyellow;
+    color: rebeccapurple;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+}
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 70vh;
+    border: 1px solid pink;
+}
+
+.message-box {
+    /* border: 1px solid red; */
+    margin: 20px;
+}
+
+.message-input {
+    padding: 10px 40px;
+    border-radius: 20px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.message-btn {
+    padding: 10px 40px;
+    border-radius: 20px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.message {
+    align-self: flex-end;
+    padding: 2px 20px;
+    border-radius: 10px;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.msg-sent {
+    align-self: flex-start;
+    background-color: skyblue;
+}
+.msg-received {
+    align-self: flex-end;
+    background-color: greenyellow;
+}
+
+.timestamp {
+    font-size: 8px;
+    align-self: flex-end;
+}
