@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import './ChatRoom.css';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
-import { transformTime } from '../utils/Helper';
+import { transformTime } from '../../utils/Helper';
 
 var stompClient;
-const ChatRoom = () => {
+const ChatRoom = ({ user }) => {
     const messagesEndRef = useRef(null);
     const [message, setMessage] = useState('');
     const [history, setHistory] = useState([]);
@@ -41,7 +41,7 @@ const ChatRoom = () => {
                 isReceived: false,
                 creationDateTime: '',
                 chatId: '100',
-                userId: '1',
+                userId: user?.id,
             };
             stompClient.send('/app/all', {}, JSON.stringify(messageDTO));
         }

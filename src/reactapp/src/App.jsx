@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
+import './style.css';
 import ReactDOM from 'react-dom/client';
-import ChatRoom from './components/ChatRoom';
+import ChatRoom from './components/ChatRoom/ChatRoom';
+import Login from './components/Login/Login';
 
 const AppLayout = () => {
+    const [user, setUser] = useState({});
     return (
         <>
-            <ChatRoom />
+            {Object.keys(user).length === 0 ? (
+                <Login setUser={setUser} />
+            ) : (
+                <ChatRoom user={user} />
+            )}
         </>
     );
 };
