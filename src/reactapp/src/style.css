@@ -4,4 +4,26 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, 'Lucida Grande', Arial,
+        Ubuntu, Cantarell, 'Fira Sans', sans-serif;
 }
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    /* background: #f1f1f1; */
+    background: white;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background-color: rgba(136, 136, 136, 0.5);
+    height: 5px;
+}
+
+/* Handle on hover */
+/* ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+} */
