@@ -6,13 +6,15 @@ import GROUP from '../../assets/group.svg';
 import MSG from '../../assets/message.svg';
 import SRCH from '../../assets/search.png';
 
-const ChatContainer = ({ user }) => {
+const ChatContainer = ({ user, markChatActive }) => {
+    const { id, chats, name, active } = user;
+
     return (
-        <div className="chat-container">
+        <div className="chat-container" data-id={id}>
             <div className="chat-header">
                 <div className="profile">
                     <img className="profile-pic" src={USER} />
-                    <span className="name">Amandeep</span>
+                    <span className="name">{name}</span>
                     <img className="new-chat" src={MSG} />
                     <img className="new-group" src={GROUP} />
                 </div>
@@ -25,7 +27,7 @@ const ChatContainer = ({ user }) => {
                     />
                 </div>
             </div>
-            <Chats user={user} />
+            <Chats user={user} markChatActive={markChatActive} />
         </div>
     );
 };

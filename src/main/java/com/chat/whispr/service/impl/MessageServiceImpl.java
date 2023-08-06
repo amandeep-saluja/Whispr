@@ -30,7 +30,8 @@ public class MessageServiceImpl implements MessageService {
     public List<MessageDTO> getAllMessage(String chatId, String userId) {
         log.info("Service layer: get all messages by userId: {} and chatId: {}", userId, chatId);
         //return MessageDTO.getMessageDTOList(messageRepository.findMessageByChatIdAndUserId(chatId, userId));
-        return service.convertToMessageDTOList(messageRepository.findMessageByChatIdAndUserId(chatId, userId));
+        //return service.convertToMessageDTOList(messageRepository.findMessageByChatIdAndUserId(chatId, userId));
+        return service.convertToMessageDTOList(messageRepository.findMessageByChatId(chatId));
     }
 
     @Override
