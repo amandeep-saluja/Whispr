@@ -9,7 +9,21 @@ import Connector from './components/WebSocketConnection/Connector';
 const AppLayout = () => {
     const [user, setUser] = useState({});
     const [activeChatId, setActiveChatId] = useState('');
-    const [history, setHistory] = useState([]);
+    const [history, setHistory] = useState({});
+    /*
+        [
+            "chatId1": [{
+                "messageId": "",
+                "body": "Hi thr",
+                "chatId": "which chat it belongs",
+                "userId": "who sent this msg",
+                "creationDateTime": "message sent date time",
+                "isRead": "yet readed?... will help to show double blue tick",
+                "isReceived": "received or not, will help to show double ticks"
+            }],
+            "chatId2": []
+        ]
+    */
 
     const markChatActive = (chatId) => {
         const activeChat = user?.chats?.map((chat) => {
@@ -21,18 +35,20 @@ const AppLayout = () => {
             chat.active = false;
             return chat;
         });
-        setUser({ ...user, chats: activeChat });
-        setHistory([]);
+        //setUser({ ...user, chats: activeChat });
+        //setHistory({});
     };
 
     useEffect(() => {
         if (Object.keys(user).length !== 0) {
-            Connector(user.id, '', history, setHistory).connect();
+            Connector(user, history, setHistory).connect();
+            //Connector(id, activeChatId, history, setHistory).fetch();
         }
+        //console.log(user);
     }, [user]);
 
     useEffect(() => {
-        console.log('History: ', history);
+        //console.log('History: ', history);
     }, [history]);
 
     return (
@@ -46,6 +62,7 @@ const AppLayout = () => {
                     activeChatId={activeChatId}
                     history={history}
                     setHistory={setHistory}
+                    setUser={setUser}
                 />
             )}
         </>

@@ -5,7 +5,7 @@
     z-index: 99999;
     background-color: #f0f2f5;
     width: 68%;
-    height: calc(100% - 38px);
+    height: calc(100% - 107px);
     position: absolute;
     top: 3vh;
     border-left: 1px solid #aaaaaa5c;
@@ -113,6 +113,7 @@
     outline: none;
     width: 100%;
     padding: 10px 10px 10px 20px;
+    resize: none;
 }
 
 .chat-box-message-send {
@@ -156,4 +157,16 @@
     /* background-color: #a0f9a4; */
     background-color: #d9fdd3;
     align-self: end;
+}
+.chat-msg {
+    margin: auto;
+    position: absolute;
+    z-index: 9999999;
+    top: 50vh;
+    right: calc(30% - 5rem);
+    font-size: 30px;
+}
+.user-name {
+    color: #e542a3 !important;
+    font-weight: 600;
 }

@@ -49,34 +49,29 @@ const ChatRoom = ({ user }) => {
     };
 
     const onPrivateMessage = (payload) => {
-        console.log(payload);
+        //console.log(payload);
         const body = JSON.parse(payload.body);
         const header = payload.headers;
         body['type'] = 'received';
-        console.log('msg: ', body);
-        console.log('header: ', header);
-        console.log(
-            `history before set: ${history} now setting this ${[
-                ...history,
-                body,
-            ]}`
-        );
+        //console.log('msg: ', body);
+        //console.log('header: ', header);
+        //console.log(`history before set: ${history} now setting this ${[...history,body,]}`);
         if (Array.isArray(body)) {
             setHistory((history) => [...history, ...body]);
         } else {
             setHistory((history) => [...history, body]);
         }
 
-        console.log(`history after set: ${history}`);
+        //console.log(`history after set: ${history}`);
     };
 
     const onMessageReceived = (payload) => {
         const payloadData = JSON.parse(payload);
-        console.log(payloadData);
+        //console.log(payloadData);
     };
 
     const onError = (err) => {
-        console.log(err);
+        //console.log(err);
     };
 
     const sendValue = () => {
@@ -92,19 +87,14 @@ const ChatRoom = ({ user }) => {
             };
             stompClient.send('/app/send', {}, JSON.stringify(messageDTO));
             messageDTO['type'] = 'send';
-            console.log(
-                `history before set: ${history} now setting this ${[
-                    ...history,
-                    messageDTO,
-                ]}`
-            );
-            console.log(setHistory, history);
+            //console.log(`history before set: ${history} now setting this ${[...history,messageDTO,]}`);
+            //console.log(setHistory, history);
             setHistory((history) => [...history, messageDTO]);
-            console.log(`history after set: ${history}`);
+            //console.log(`history after set: ${history}`);
         }
         setMessage('');
     };
-    console.log(history);
+    //console.log(history);
 
     // const sendMessage = () => {
     //     sendValue();

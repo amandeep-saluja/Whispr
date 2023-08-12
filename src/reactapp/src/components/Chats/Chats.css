@@ -3,6 +3,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     max-height: 84%;
+    height: 100%;
     background-color: white;
 }
 
@@ -25,10 +26,14 @@
     align-items: center;
     padding: 5px 10px;
     /* margin: 5px 0; */
-    border-top: 1px solid #aaaaaa5c;
+    /* border-top: 1px solid #aaaaaa5c; */
     background-color: white;
     /* position: relative; */
     cursor: pointer;
+}
+
+.chat-row:last-child {
+    border-bottom: 1px solid #aaaaaa5c;
 }
 
 .opened {
@@ -73,8 +78,25 @@
 
 .chat-user-last-msg {
     font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 9rem;
 }
 
 .chat-last-msg-timestamp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     font-size: 12px;
+}
+
+.chat-unread-count {
+    color: #fff;
+    background-color: #25d366;
+    border-radius: 40px;
+    padding: 2px 6px 4px 6px;
+    font-size: 12px;
+    font-weight: 600;
 }

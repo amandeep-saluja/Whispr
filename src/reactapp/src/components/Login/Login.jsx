@@ -1,20 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Login.css';
-import { BASE_URL, USERS_ALL } from '../../Constants';
+import useAllUsers from '../../hooks/useAllUsers';
 
 const Login = ({ setUser }) => {
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        fetchAllUsers();
-    }, []);
-
-    const fetchAllUsers = () => {
-        fetch(BASE_URL + USERS_ALL)
-            .then((response) => response.json())
-            .catch((err) => console.log(err))
-            .then((data) => setUsers(data));
-    };
+    const users = useAllUsers();
 
     return (
         <div className="login-container">
@@ -26,10 +15,8 @@ const Login = ({ setUser }) => {
                             event.target.options[event.target.selectedIndex];
                         const customDataValue =
                             selectedOption.getAttribute('data-user');
-                        console.log(customDataValue);
-                        console.log(
-                            users.filter((u) => u.id === customDataValue)[0]
-                        );
+                        //console.log(customDataValue);
+                        //console.log(users.filter((u) => u.id === customDataValue)[0]);
                         setUser(
                             users.filter((u) => u.id === customDataValue)[0]
                         );

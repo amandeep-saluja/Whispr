@@ -26,7 +26,7 @@ public class Chat {
     @Column(name = "group_name")
     private String groupName;
 
-    @ManyToMany(mappedBy = "chats", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "chats", fetch = FetchType.EAGER)
 //    @JsonBackReference
     @JsonIgnoreProperties("chats")
     private List<User> users;

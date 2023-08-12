@@ -10,7 +10,7 @@ public interface MessageService {
 
     public MessageDTO sendMessage(String chatId, String userId, String msg);
 
-    public MessageDTO markReceived(String messageId);
+    public List<String> markReceived(List<String> messageIds);
 
-    public MessageDTO markRead(String messageId);
+    public List<String> markRead(List<String> messageIds);
 }

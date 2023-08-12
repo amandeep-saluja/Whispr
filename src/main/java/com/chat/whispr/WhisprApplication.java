@@ -33,24 +33,27 @@ public class WhisprApplication {
 
 		// Create and save sample chats
 		Chat chat1 = new Chat("100", "Family Chat", null);
-		Chat chat2 = new Chat("200", "Friends Chat", null);
-		Chat chat3 = new Chat("300", "Work Chat", null);
+		//Chat chat2 = new Chat("200", "Friends Chat", null);
+		//Chat chat3 = new Chat("300", "Work Chat", null);
 		
 		// Add users to the chats and chats to the users
 		List<Chat> user1Chats = new ArrayList<>();
 		user1Chats.add(chat1);
-		user1Chats.add(chat2);
+		//user1Chats.add(chat2);
 		user1.setChats(user1Chats);
 
 		List<Chat> user2Chats = new ArrayList<>();
-		user2Chats.add(chat2);
-		user2Chats.add(chat3);
+		user2Chats.add(chat1);
+		//user2Chats.add(chat2);
+		//user2Chats.add(chat3);
 		user2.setChats(user2Chats);
 
 		List<Chat> user3Chats = new ArrayList<>();
 		user3Chats.add(chat1);
-		user3Chats.add(chat3);
+		//user3Chats.add(chat3);
 		user3.setChats(user3Chats);
+
+
 
 		// Add users to chats
 		/*Set<User> chat1Users = new HashSet<>();
@@ -69,8 +72,8 @@ public class WhisprApplication {
 		chat3.setUsers(chat3Users);*/
 
 		chatRepository.save(chat1);
-		chatRepository.save(chat2);
-		chatRepository.save(chat3);
+		//chatRepository.save(chat2);
+		//chatRepository.save(chat3);
 
 		userRepository.save(user1);
 		userRepository.save(user2);

@@ -17,9 +17,9 @@ public class MessageDTO {
 
     private String body;
 
-    private boolean isRead;
+    private List<String> readByUserIds;
 
-    private boolean isReceived;
+    private List<String> receivedByUserIds;
 
     private LocalDateTime creationDateTime;
 

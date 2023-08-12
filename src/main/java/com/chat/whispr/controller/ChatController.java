@@ -2,17 +2,15 @@ package com.chat.whispr.controller;
 
 import com.chat.whispr.entity.Chat;
 import com.chat.whispr.entity.User;
-import com.chat.whispr.model.ChatDTO;
-import com.chat.whispr.model.UserDTO;
 import com.chat.whispr.service.ChatService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("chat")
-@CrossOrigin
+@CrossOrigin()
 public class ChatController {
 
     private final ChatService service;
@@ -27,12 +25,26 @@ public class ChatController {
     }
 
     @PostMapping("/create")
-    public Chat createChatRoom(@RequestParam(name = "userIds") List<String> userIds, @RequestParam(name = "groupName") String groupName) {
+    public Chat createChatRoom(@RequestParam(name = "userIds") List<String> userIds, @RequestParam(name = "groupName", required = false) String groupName) {
         return service.createChatRoom(userIds, groupName);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteChatRoom(@RequestParam(name = "chatId") String chatId) {
+        boolean flag = service.deleteChatRoom(chatId);
+        if(flag)
+            return ResponseEntity.ok("Chat "+chatId+" Successfully deleted");
+        else
+            return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/add-user")
     public Chat addUsersToChat(@RequestParam(name = "chatId") String chatId, @RequestParam(name = "userIds") List<String> userIds) {
         return service.addUserToChatRoom(chatId, userIds);
+    }
+
+    @GetMapping("/all")
+    public List<Chat> getAllChat() {
+        return service.getAllChat();
     }
 }

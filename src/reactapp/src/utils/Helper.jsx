@@ -1,5 +1,5 @@
 export const transformTime = (dateTime) => {
-    return formatAMPM(new Date(dateTime));
+    return dateTime ? formatAMPM(new Date(dateTime)) : undefined;
 };
 
 function formatAMPM(date) {

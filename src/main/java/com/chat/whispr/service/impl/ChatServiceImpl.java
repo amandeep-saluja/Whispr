@@ -49,6 +49,16 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
+    public boolean deleteChatRoom(String chatId) {
+        Optional<Chat> chat = chatRepository.findById(chatId);
+        if(chat.isPresent()) {
+            chatRepository.deleteById(chatId);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Chat addUserToChatRoom(String chatId, List<String> userIds) {
         List<User> user = userRepository.findAllById(userIds);
         Optional<Chat> chat = chatRepository.findById(chatId);
@@ -73,5 +83,10 @@ public class ChatServiceImpl implements ChatService {
             //return service.convertToUserDTOList(users);
         }
         return null;
+    }
+
+    @Override
+    public List<Chat> getAllChat() {
+        return chatRepository.findAll();
     }
 }

@@ -12,7 +12,11 @@ public interface ChatService {
 
     public Chat createChatRoom(List<String> userIds, String groupName);
 
+    public boolean deleteChatRoom(String chatId);
+
     public Chat addUserToChatRoom(String chatId, List<String> userId);
 
     public List<User> getAllUser(String chatId);
+
+    public List<Chat> getAllChat();
 }
