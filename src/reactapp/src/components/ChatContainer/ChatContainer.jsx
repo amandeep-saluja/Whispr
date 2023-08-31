@@ -1,30 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ChatContainer.css';
 import Chats from '../Chats/Chats';
 import USER from '../../assets/man.svg';
 import GROUP from '../../assets/group.svg';
+import MENU from '../../assets/three-dots.svg';
 import MSG from '../../assets/message.svg';
 import SRCH from '../../assets/search.png';
-import useAllUsers from '../../hooks/useAllUsers';
 import NewChat from '../NewChat/NewChat';
+import { useDispatch, useSelector } from 'react-redux';
+import { initializeUsers } from '../../store/userSlice';
+import useAllUsers from '../../hooks/useAllUsers';
+import useFetchChatsForUserId from '../../hooks/useFetchChatsForUserId';
+import { initializeChats } from '../../store/chatSlice';
 
-const ChatContainer = ({ user, markChatActive, history, setUser, activeChatUsers }) => {
-    const { id, chats, name, active } = user;
-
+const ChatContainer = () => {
+    const user = useSelector((store) => store.user.currentUser);
+    const { id, chatIds, name, isActive } = user;
+    const dispatch = useDispatch();
     const users = useAllUsers();
+    const chats = useFetchChatsForUserId(id);
+
+    useEffect(() => {
+        if (users != null && users.length > 0) {
+            dispatch(initializeUsers(users));
+        }
+    }, [users]);
+
+    useEffect(() => {
+        if (chats?.length > 0) {
+            dispatch(initializeChats(chats));
+        }
+    }, [chats]);
 
     const [openNewChatPage, setOpenNewChatPage] = useState(false);
 
     return (
         <div className="chat-container" data-id={id}>
             {openNewChatPage ? (
-                <NewChat
-                    id={id}
-                    users={users}
-                    setOpenNewChatPage={setOpenNewChatPage}
-                    user={user}
-                    setUser={setUser}
-                />
+                <NewChat user={user} setOpenNewChatPage={setOpenNewChatPage} />
             ) : (
                 <>
                     <div className="chat-header">
@@ -37,6 +50,7 @@ const ChatContainer = ({ user, markChatActive, history, setUser, activeChatUsers
                                 onClick={() => setOpenNewChatPage(true)}
                             />
                             <img className="new-group" src={GROUP} />
+                            <img alt="Menu" className="menu" src={MENU} />
                         </div>
                         <div className="chat-search">
                             <img src={SRCH} className="search-icon" />
@@ -47,12 +61,7 @@ const ChatContainer = ({ user, markChatActive, history, setUser, activeChatUsers
                             />
                         </div>
                     </div>
-                    <Chats
-                        user={user}
-                        markChatActive={markChatActive}
-                        history={history}
-                        activeChatUsers={activeChatUsers}
-                    />
+                    <Chats user={user} />
                 </>
             )}
         </div>

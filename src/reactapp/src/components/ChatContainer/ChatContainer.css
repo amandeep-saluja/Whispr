@@ -7,7 +7,9 @@
     z-index: 99999;
     top: 3vh;
     overflow: hidden;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow:
+        0 4px 8px 0 rgba(0, 0, 0, 0.2),
+        0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 @media screen and (min-width: 720px) and (max-width: 1139px) {
@@ -79,6 +81,15 @@
 .new-group {
     width: 50px;
     cursor: pointer;
+}
+.new-group:active {
+    background-color: lightgray;
+    border-radius: 30px;
+}
+.menu {
+    width: 20px;
+    cursor: pointer;
+    transform: rotate(90deg);
 }
 .new-chat,
 .new-group {

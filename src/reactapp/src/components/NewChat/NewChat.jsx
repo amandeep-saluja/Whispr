@@ -1,17 +1,23 @@
 import './NewChat.css';
 import USER from '../../assets/man.svg';
 import BACK from '../../assets/white-back.png';
-import { useEffect } from 'react';
-import { BASE_URL, NEW_CHAT } from '../../Constants';
+import { NEW_CHAT } from '../../Constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { addChatId } from '../../store/userSlice';
+import { addNewChat } from '../../store/chatSlice';
 
-const NewChat = ({ id, users, setOpenNewChatPage, user, setUser }) => {
-    useEffect(() => {}, []);
+const NewChat = ({ user, setOpenNewChatPage }) => {
+    const users = useSelector((store) => store.user.userMap);
+    const dispatch = useDispatch();
+    const addChatEvent = (newChat) => {
+        dispatch(addNewChat(newChat));
+        dispatch(addChatId(newChat.id));
+    };
 
     const initiateNewChat = (targetUser) => {
-        if (targetUser) {
-            let chats = user?.chats;
+        if (targetUser && user.id) {
             fetch(
-                `${BASE_URL}${NEW_CHAT}?userIds=${id},${targetUser}&groupName=`,
+                `${NEW_CHAT}?creatorId=${user?.id}&userIds=${user?.id},${targetUser}&groupName=`,
                 {
                     method: 'POST',
                     headers: {
@@ -23,12 +29,10 @@ const NewChat = ({ id, users, setOpenNewChatPage, user, setUser }) => {
             )
                 .then((response) => response.json())
                 .catch((err) => console.error(err))
-                .then((data) =>
-                    setUser({
-                        ...user,
-                        chats: chats.push(data) ? chats : chats,
-                    })
-                );
+                .then((data) => {
+                    addChatEvent(data);
+                    setOpenNewChatPage(false);
+                });
         }
     };
 
@@ -43,22 +47,26 @@ const NewChat = ({ id, users, setOpenNewChatPage, user, setUser }) => {
                 <div className="new-chat-menu-label">New chat</div>
             </div>
             <div className="new-chat-menu-body">
-                {users?.map((user) => (
-                    <div
-                        className="new-chat-menu-user-row"
-                        key={user?.id}
-                        data-user-id={user?.id}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            initiateNewChat(e.currentTarget.dataset['userId']);
-                        }}
-                    >
-                        <img className="chat-user-icon" src={USER} />
-                        <div className="new-chat-menu-row-name">
-                            {user?.name}
+                {Object.values(users)
+                    ?.filter((u) => u.id != user.id)
+                    ?.map((u) => (
+                        <div
+                            className="new-chat-menu-user-row"
+                            key={u?.id}
+                            data-user-id={u?.id}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                initiateNewChat(
+                                    e.currentTarget.dataset['userId']
+                                );
+                            }}
+                        >
+                            <img className="chat-user-icon" src={USER} />
+                            <div className="new-chat-menu-row-name">
+                                {u?.name}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
             </div>
         </div>
     );

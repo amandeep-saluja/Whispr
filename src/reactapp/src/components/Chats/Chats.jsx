@@ -3,18 +3,31 @@ import './Chats.css';
 import USER from '../../assets/man.svg';
 import { transformTime } from '../../utils/Helper';
 import useFetchChatUsers from '../../hooks/useFetchChatUsers';
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveChat } from '../../store/chatSlice';
 
-const Chats = ({ user, markChatActive, history, activeChatUsers }) => {
-    const { id, chats, name, active } = user;
+const Chats = ({ user }) => {
+    const { id, chatIds, name, isActive } = user;
+    const { chats, activeChatId } = useSelector((store) => store.chat);
+    const msgMap = useSelector((store) => store.message.chatMsgMap);
+
+    const dispatch = useDispatch();
+
+    const markChatActive = (selectedChatId) => {
+        if (selectedChatId) {
+            dispatch(setActiveChat(selectedChatId));
+        }
+    };
+
     return (
         <div className="chats-container">
-            {chats?.map((chat) => (
+            {chatIds?.map((chatId) => (
                 <div
                     className={
-                        chat?.active === true ? 'chat-row opened' : 'chat-row'
+                        chatId === activeChatId ? 'chat-row opened' : 'chat-row'
                     }
-                    key={chat?.id}
-                    data-chat-id={chat?.id}
+                    key={chatId}
+                    data-chat-id={chatId}
                     onClick={(e) => {
                         const chatId = e.currentTarget.dataset['chatId'];
                         markChatActive(chatId);
@@ -25,28 +38,28 @@ const Chats = ({ user, markChatActive, history, activeChatUsers }) => {
                     <div className="chat-user-box">
                         <div className="user-mid">
                             <div className="chat-user-name">
-                                {chat?.groupName == ''
-                                    ? useFetchChatUsers(chat?.id)?.filter(
-                                          (u) => u.id != id
-                                      )[0]?.name
-                                    : chat.groupName}
+                                {chats[chatId]?.isGroup
+                                    ? chats[chatId]?.name
+                                    : chats[chatId]?.userDetails.filter(
+                                          (u) => u.userId != id
+                                      )[0]?.userName}
                             </div>
                             <div className="chat-user-last-msg">
-                                {history[chat?.id]?.slice(-1)[0].body}
+                                {msgMap[chatId]?.slice(-1)[0].content}
                             </div>
                         </div>
                         <div className="chat-last-msg-timestamp">
                             <span>
                                 {transformTime(
-                                    history[chat?.id]?.slice(-1)[0]
+                                    msgMap[chatId]?.slice(-1)[0]
                                         .creationDateTime
                                 )}
                             </span>
-                            {history[chat?.id]?.filter((m) => !m?.isRead)
-                                .length > 0 && (
+                            {msgMap[chatId]?.filter((m) => !m?.isRead).length >
+                                0 && (
                                 <span className="chat-unread-count">
                                     {
-                                        history[chat?.id]?.filter(
+                                        msgMap[chatId]?.filter(
                                             (m) => !m?.isRead
                                         ).length
                                     }

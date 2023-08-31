@@ -12,3 +12,9 @@ function formatAMPM(date) {
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return strTime;
 }
+
+export const objIsEmpty = (obj) => {
+    return (
+        (obj != null) | (obj != undefined) && Object?.keys(obj)?.length === 0
+    );
+};
