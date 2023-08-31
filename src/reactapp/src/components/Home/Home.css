@@ -1,0 +1,15 @@
+.home {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.header {
+    background-color: #00a884;
+    height: 18vh;
+}
+
+.body {
+    background-color: #eae6df;
+    height: 82vh;
+}

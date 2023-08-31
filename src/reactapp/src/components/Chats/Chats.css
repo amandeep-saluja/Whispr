@@ -1,0 +1,102 @@
+.chats-container {
+    max-width: 30%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 84%;
+    height: 100%;
+    background-color: white;
+}
+
+@media screen and (min-width: 620px) and (max-width: 719px) {
+    .chats-container {
+        max-width: 49%;
+    }
+}
+
+@media screen and (min-width: 720px) and (max-width: 1140px) {
+    .chats-container {
+        max-width: 40%;
+    }
+}
+
+.chat-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    /* margin: 5px 0; */
+    /* border-top: 1px solid #aaaaaa5c; */
+    background-color: white;
+    /* position: relative; */
+    cursor: pointer;
+}
+
+.chat-row:last-child {
+    border-bottom: 1px solid #aaaaaa5c;
+}
+
+.opened {
+    background-color: #f0f2f5;
+}
+
+.chat-row:not(:first-child) {
+    margin: 5px 0;
+}
+
+.border-top {
+    border-top: 2px solid #0004ff;
+    position: absolute;
+    top: 10xp;
+    right: 50%;
+}
+
+.chat-user-icon {
+    width: 50px;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.user-mid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.chat-user-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-left: 20px;
+}
+
+.chat-user-name {
+    font-size: 18px;
+}
+
+.chat-user-last-msg {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 9rem;
+}
+
+.chat-last-msg-timestamp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+}
+
+.chat-unread-count {
+    color: #fff;
+    background-color: #25d366;
+    border-radius: 40px;
+    padding: 2px 6px 4px 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
