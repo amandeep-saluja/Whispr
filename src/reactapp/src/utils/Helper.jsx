@@ -18,3 +18,12 @@ export const objIsEmpty = (obj) => {
         (obj != null) | (obj != undefined) && Object?.keys(obj)?.length === 0
     );
 };
+
+export const msgReceived = (chat, msg) => {
+    let receivedRecipentCount = 0;
+    const totalUsers = chat?.userDetails?.length;
+    msg?.receivedUserId?.forEach((id) => {
+        if (chat.userDetails.indexOf(id) != -1) receivedRecipentCount++;
+    });
+    return receivedRecipentCount == totalUsers;
+};

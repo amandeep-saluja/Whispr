@@ -31,6 +31,11 @@ const Chats = ({ user }) => {
                     onClick={(e) => {
                         const chatId = e.currentTarget.dataset['chatId'];
                         markChatActive(chatId);
+                        //call all the message read which are unread
+                        const msgIds = msgMap[chatId]
+                            ?.filter((m) => m?.readUserId?.indexOf(id) != -1)
+                            ?.map((m) => m.id);
+                        console.log(msgIds);
                     }}
                 >
                     {/* <div className="border-top"></div> */}
@@ -45,14 +50,14 @@ const Chats = ({ user }) => {
                                       )[0]?.userName}
                             </div>
                             <div className="chat-user-last-msg">
-                                {msgMap[chatId]?.slice(-1)[0].content}
+                                {msgMap[chatId]?.slice(-1)[0]?.content}
                             </div>
                         </div>
                         <div className="chat-last-msg-timestamp">
                             <span>
                                 {transformTime(
                                     msgMap[chatId]?.slice(-1)[0]
-                                        .creationDateTime
+                                        ?.creationDateTime
                                 )}
                             </span>
                             {msgMap[chatId]?.filter((m) => !m?.isRead).length >
@@ -60,7 +65,8 @@ const Chats = ({ user }) => {
                                 <span className="chat-unread-count">
                                     {
                                         msgMap[chatId]?.filter(
-                                            (m) => !m?.isRead
+                                            (m) =>
+                                                m?.readUserId?.indexOf(id) != -1
                                         ).length
                                     }
                                 </span>

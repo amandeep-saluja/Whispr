@@ -61,10 +61,14 @@ public class MessageController {
 
         List<String> messageIds = data.messageIds;
         String userId = data.userId;
+        String chatId = data.chatId;
 
         log.info("mark received message received API called for msgID {}", messageIds);
-        data.messageIds = service.markReceived(messageIds, userId);
-        messagingTemplate.convertAndSendToUser(userId, "/message-received", data);
+        Optional<Chat> chat = chatRepository.findById(chatId);
+        chat.ifPresent(result-> {
+            data.messageIds = service.markReceived(messageIds, userId);
+            result.getUserDetails().forEach(user-> messagingTemplate.convertAndSendToUser(user.getUserId(), "/message-received", data));
+        });
         return messageIds;
     }
 
@@ -76,10 +80,14 @@ public class MessageController {
 
         List<String> messageIds = data.messageIds;
         String userId = data.userId;
+        String chatId = data.chatId;
 
         log.info("mark read message received API called for msgID {}", messageIds);
-        data.messageIds = service.markRead(messageIds, userId);
-        messagingTemplate.convertAndSendToUser(userId, "/message-read", data);
+        Optional<Chat> chat = chatRepository.findById(chatId);
+        chat.ifPresent(result-> {
+            data.messageIds = service.markRead(messageIds, userId);
+            result.getUserDetails().forEach(user-> messagingTemplate.convertAndSendToUser(user.getUserId(), "/message-read", data));
+        });
         return messageIds;
     }
     private static class JsonDataObject {

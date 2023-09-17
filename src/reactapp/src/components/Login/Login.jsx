@@ -30,6 +30,7 @@ const Login = () => {
                 }
                 return response;
             })
+            .catch((err) => console.error(err))
             .then((data) => {
                 console.log(data);
                 setFormData({

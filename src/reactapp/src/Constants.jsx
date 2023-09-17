@@ -18,9 +18,11 @@ export const MESSAGE_RECEIVED = '/app/received';
 
 export const MESSAGE_READ = '/app/read';
 
-export const MESSAGE_CHANNEL = (userId) => `/user/${userId}/message`;
+export const MESSAGE_LISTENER = (userId) => `/user/${userId}/message`;
 
-export const CHAT_METADATA_CHANNEL = (chatId) => `/user/${chatId}/chat`;
+export const MESSAGE_RECEIEVED_RECEPIENT_LISTENER = (userId) => `/user/${userId}/message-received`;
+
+export const MESSAGE_READ_RECEPIENT_LISTENER = (userId) => `/user/${userId}/message-read`;
 
 export const MESSAGE_ALL = '/app/all';
 

@@ -4,9 +4,9 @@ import {
     MESSAGE_READ,
     MESSAGE_RECEIVED,
     MESSAGE_SEND,
-    MESSAGE_CHANNEL,
     WS_URL,
     MESSAGE_ALL,
+    MESSAGE_LISTENER,
 } from '../../Constants';
 
 var stompClient;
@@ -24,7 +24,7 @@ const Connector = (user, history, setHistory) => {
     };
 
     const onConnected = () => {
-        stompClient.subscribe(MESSAGE_CHANNEL(user.id), onChatHistory);
+        stompClient.subscribe(MESSAGE_LISTENER(user.id), onChatHistory);
         fetchAllMessages();
     };
 

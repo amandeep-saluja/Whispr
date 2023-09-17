@@ -3,17 +3,22 @@ import './ChatBox.css';
 import USER from '../../assets/man.svg';
 import SRCH from '../../assets/search.png';
 import BIN from '../../assets/trash3.svg';
+import TICK from '../../assets/tick.svg';
+import DOUBLE_TICK from '../../assets/double-check.svg';
 import RIGHT_ARROW from '../../assets/triangle.png';
-import { objIsEmpty, transformTime } from '../../utils/Helper';
+import { msgReceived, objIsEmpty, transformTime } from '../../utils/Helper';
 import { useDispatch, useSelector } from 'react-redux';
 import { initializeMessages } from '../../store/messageSlice';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 import {
-    CHAT_METADATA_CHANNEL,
     DELETE_CHAT,
     MESSAGE_ALL,
-    MESSAGE_CHANNEL,
+    MESSAGE_LISTENER,
+    MESSAGE_READ,
+    MESSAGE_READ_RECEPIENT_LISTENER,
+    MESSAGE_RECEIEVED_RECEPIENT_LISTENER,
+    MESSAGE_RECEIVED,
     MESSAGE_SEND,
     WS_URL,
 } from '../../Constants';
@@ -66,8 +71,15 @@ const ChatBox = () => {
     };
 
     const onConnected = () => {
-        stompClient.subscribe(MESSAGE_CHANNEL(user.id), onChatHistory);
-        stompClient.subscribe(CHAT_METADATA_CHANNEL(user.id), onChatHistory);
+        stompClient.subscribe(MESSAGE_LISTENER(user.id), onChatHistory);
+        stompClient.subscribe(
+            MESSAGE_RECEIEVED_RECEPIENT_LISTENER(user.id),
+            onReceivedHandler
+        );
+        stompClient.subscribe(
+            MESSAGE_READ_RECEPIENT_LISTENER(user.id),
+            onReadHandler
+        );
         fetchAllMessages();
     };
 
@@ -87,21 +99,32 @@ const ChatBox = () => {
         const body = JSON.parse(payload.body);
         const header = payload.headers;
         const id = Array.isArray(body) ? body[0]?.chatId : body.chatId;
-        console.log(latestMsg.msgs);
+        //console.log(latestMsg.msgs);
 
         if (id) {
             if (Array.isArray(body)) {
-                const receivedMessages = body.map((msg) => {
-                    msg.receivedUserId = msg?.receivedUserId
-                        ? [...msg.receivedUserId, user.id]
-                        : [user.id];
+                const msgIds = body
+                    ?.filter((m) => m?.receivedUserId?.indexOf(id) != -1)
+                    ?.map((m) => m.id);
+                if (msgIds.length > 0) {
+                    sendReceivedAck(msgIds, id);
+                }
+                const receivedMessages = body?.map((msg) => {
+                    if (msg?.receivedUserId?.indexOf(id) != -1) {
+                        msg.receivedUserId = msg?.receivedUserId
+                            ? [...msg.receivedUserId, user.id]
+                            : [user.id];
+                    }
                     return msg;
                 });
                 initMessages({ ...latestMsg.msgs, [id]: receivedMessages });
             } else {
-                body.receivedUserId = body?.receivedUserId
-                    ? [...body.receivedUserId, user.id]
-                    : [user.id];
+                if (body.receivedUserId?.indexOf(user.id) == -1) {
+                    sendReceivedAck([body.id], id);
+                    body.receivedUserId = body?.receivedUserId
+                        ? [...body.receivedUserId, user.id]
+                        : [user.id];
+                }
                 initMessages({
                     ...latestMsg.msgs,
                     [id]: [
@@ -123,6 +146,64 @@ const ChatBox = () => {
             stompClient.send(MESSAGE_SEND, {}, JSON.stringify(messageDTO));
             messageDTO['type'] = 'send';
         }
+    };
+
+    const sendReceivedAck = (msgIds, chatId) => {
+        // const msgIds = msgHistory
+        //     .filter((m) => m.received == false)
+        //     .map((m) => m.id);
+
+        const dataToSend = {
+            messageIds: msgIds,
+            userId: user.id,
+            chatId: chatId,
+        };
+
+        if (stompClient && msgIds.length > 0) {
+            stompClient.send(MESSAGE_RECEIVED, {}, JSON.stringify(dataToSend));
+        }
+    };
+
+    const sendReadAck = (chatId) => {
+        const msgIds = history[chatId]
+            .filter((m) => m.read == false)
+            .map((m) => m.id);
+
+        const dataToSend = {
+            messageIds: msgIds,
+            userId: user.id,
+            chatId: chatId,
+        };
+
+        if (stompClient && msgIds.length > 0) {
+            stompClient.send(MESSAGE_READ, {}, JSON.stringify(dataToSend));
+        }
+    };
+
+    const onReadHandler = (payload) => {
+        const msgIds = JSON.parse(payload.body);
+        const header = payload.headers;
+
+        console.log(msgIds);
+
+        //msgMap[activeChatId]?
+        msgIds?.map((mId) => {
+            let flag = true;
+            const msgObj = msgMap[activeChatId]?.filter((m) => {
+                if (flag && m.id === mId) {
+                    flag = false; // no need to filter again -> skip
+                    return true; // msg found so true
+                }
+                return false; // not found -> skip
+            });
+        });
+    };
+
+    const onReceivedHandler = (payload) => {
+        const body = JSON.parse(payload.body);
+        const header = payload.headers;
+        const id = Array.isArray(body) ? body[0]?.chatId : body.chatId;
+        console.log(body, id);
     };
 
     useEffect(() => {
@@ -216,6 +297,19 @@ const ChatBox = () => {
                             <div className="time">
                                 {transformTime(new Date(msg?.creationDateTime))}
                             </div>
+                            {msgReceived(chats[activeChatId], msg) ? (
+                                <img
+                                    alt="double tick"
+                                    src={DOUBLE_TICK}
+                                    className="double-tick"
+                                />
+                            ) : (
+                                <img
+                                    alt="tick"
+                                    src={TICK}
+                                    className="single-tick"
+                                />
+                            )}
                         </div>
                     ))}
                 <div ref={messagesEndRef} />

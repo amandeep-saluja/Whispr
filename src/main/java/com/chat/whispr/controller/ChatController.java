@@ -44,8 +44,14 @@ public class ChatController {
         //return this.eventBus.createSseEmitter(id, SseEvent.DEFAULT_EVENT);
         final SseEmitter emitter = new SseEmitter();
         service.addEmitter(id, emitter);
-        //emitter.onCompletion(() -> service.removeEmitter(id, emitter));
-        emitter.onTimeout(() -> service.removeEmitter(id, emitter));
+        emitter.onCompletion(() -> {
+            log.info("onCompletion-> SSE: {}", service.getEmitters().keySet());
+            service.removeEmitter(id, emitter);
+        });
+        emitter.onTimeout(() -> {
+            log.info("onTimeout-> SSE: {}", service.getEmitters().keySet());
+            service.removeEmitter(id, emitter);
+        });
         return emitter;
     }
 

@@ -45,6 +45,10 @@ public class ChatServiceImpl {
         emitterMap.put(id, emitter);
     }
 
+    public Map<String, SseEmitter> getEmitters() {
+        return emitterMap;
+    }
+
     public void removeEmitter(final String id, final SseEmitter emitter) {
         emitterMap.remove(id, emitter);
     }
